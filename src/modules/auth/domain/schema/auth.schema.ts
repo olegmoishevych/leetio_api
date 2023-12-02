@@ -1,6 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+/**
+ * Mongoose schema for user authentication.
+ * This class defines the structure of the 'auth' document in the database,
+ * including various fields related to user information and authentication details.
+ * It extends Mongoose's Document class for integration with MongoDB.
+ */
+
 @Schema({
   versionKey: false,
   timestamps: true,
