@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongodbModule } from '../../providers/mongodb/mongodb.module';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '../jwt/jwt.module';
+import { GlobalThrottlerModule } from '../throttler/throttler.module';
 
 /**
  * Main application module.
@@ -13,7 +14,13 @@ import { JwtModule } from '../jwt/jwt.module';
  */
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongodbModule, AuthModule, JwtModule],
+  imports: [
+    ConfigModule.forRoot(),
+    MongodbModule,
+    AuthModule,
+    JwtModule,
+    GlobalThrottlerModule,
+  ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
 })

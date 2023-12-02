@@ -12,7 +12,7 @@ export class AppController {
   /**
    * Root GET endpoint.
    * Handles GET requests at the root of the application.
-   * This endpoint is rate-limited to 5 requests per 30 seconds per IP to prevent abuse.
+   * This endpoint is rate-limited to 5 requests per 20 seconds per IP to prevent abuse.
    * Delegates to AppService to retrieve and return a greeting message.
    *
    * @returns {string} The greeting message returned by the AppService.
