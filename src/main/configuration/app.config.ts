@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { swaggerConfig } from './swagger/swagger.config';
+import { pipeSetup } from './pipe.setup';
 
 /**
  * Application configuration function.
@@ -11,8 +11,7 @@ import { swaggerConfig } from './swagger/swagger.config';
  */
 
 export const appConfig = (app: INestApplication) => {
-  app.useGlobalPipes(new ValidationPipe());
-
+  pipeSetup(app);
   swaggerConfig(app, 'api');
 };
 
