@@ -4,10 +4,10 @@ import { Model } from 'mongoose';
 import { Auth } from '../domain/schema/auth.schema';
 
 @Injectable()
-export class AuthRepository {
+export class AuthQueryRepository {
   constructor(@InjectModel(Auth.name) private authModel: Model<Auth>) {}
 
-  async findByEmail(email: string): Promise<Auth | null> {
+  async findUserByEmail(email: string): Promise<Auth | null> {
     return this.authModel.findOne({ email }).exec();
   }
 }

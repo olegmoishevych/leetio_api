@@ -1,15 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Auth } from '../domain/schema/auth.schema';
 import { RegistrationDto } from '../api/input-dtos/registration.dto';
+import { AuthRepository } from '../infrastructure/auth.repository';
+import { AuthQueryRepository } from '../infrastructure/auth.query-repository';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(Auth.name) private authModel: Model<Auth>) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly authQueryRepository: AuthQueryRepository,
+  ) {}
 
   async registration(dto: RegistrationDto): Promise<Auth> {
-    const newUser = new this.authModel(dto);
-    return newUser.save();
+    const user = await this.authQueryRepository.findUserByEmail(dto.email);
+
+    if (user) {
+      throw new ConflictException('Пользователь с таким email уже существует');
+    }
+
+    return this.authRepository.create(dto);
   }
 }
