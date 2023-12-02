@@ -6,6 +6,12 @@ import { MongodbModule } from '../../providers/mongodb/mongodb.module';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '../jwt/jwt.module';
 
+/**
+ * Main application module.
+ * This module acts as the root module of the application, orchestrating the integration of various features and services.
+ * It imports essential modules for configuration, database connectivity, authentication, and JWT handling.
+ */
+
 @Module({
   imports: [ConfigModule.forRoot(), MongodbModule, AuthModule, JwtModule],
   controllers: [AppController],
