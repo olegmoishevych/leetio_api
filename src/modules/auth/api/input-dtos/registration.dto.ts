@@ -23,7 +23,7 @@ export class RegistrationDto {
 
   @IsString()
   @IsOptional()
-  picture?: string;
+  avatar?: string;
 
   @IsString()
   password: string;

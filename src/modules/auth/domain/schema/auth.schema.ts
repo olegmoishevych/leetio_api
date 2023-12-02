@@ -26,7 +26,7 @@ export class Auth extends Document {
   dateOfBirth: Date;
 
   @Prop()
-  picture: string;
+  avatar: string;
 
   @Prop({ required: true })
   password: string;
