@@ -7,6 +7,7 @@ import { Auth, AuthSchema } from './domain/schema/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthQueryRepository } from './infrastructure/auth.query-repository';
 import { AuthRepository } from './infrastructure/auth.repository';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 /**
  * Authentication module.
@@ -15,6 +16,12 @@ import { AuthRepository } from './infrastructure/auth.repository';
  */
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     ConfigModule,
     MongooseModule.forFeature([{ name: Auth.name, schema: AuthSchema }]),
     JwtModule,

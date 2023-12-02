@@ -16,6 +16,7 @@ export class AuthController {
   /**
    * Endpoint for user registration.
    * Accepts a POST request with user registration details and delegates the registration logic to AuthService.
+   * This endpoint is rate-limited to prevent abuse (e.g., using the 'short' rate limit configuration).
    * Returns the newly created user's data upon successful registration.
    *
    * @param {RegistrationDto} dto - Data Transfer Object containing the new user's registration information.
