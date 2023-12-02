@@ -8,6 +8,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthQueryRepository } from './infrastructure/auth.query-repository';
 import { AuthRepository } from './infrastructure/auth.repository';
 
+/**
+ * Authentication module.
+ * This module groups all the components related to authentication functionality,
+ * including controllers, services, and repositories for handling authentication and authorization.
+ */
 @Module({
   imports: [
     ConfigModule,
