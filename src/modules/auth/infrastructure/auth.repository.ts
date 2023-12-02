@@ -4,15 +4,22 @@ import { Model } from 'mongoose';
 import { Auth } from '../domain/schema/auth.schema';
 import { RegistrationDto } from '../api/input-dtos/registration.dto';
 
+/**
+ * Repository for handling CRUD operations on the Auth model.
+ * This class provides methods for interacting with the Auth collection in the database,
+ * utilizing Mongoose Model for database operations.
+ */
 @Injectable()
 export class AuthRepository {
   constructor(@InjectModel(Auth.name) private authModel: Model<Auth>) {}
 
   /**
-   * Creates a new user with the provided registration data.
+   * Creates a new user in the database.
+   * This method takes a RegistrationDto, creates a new Auth document, and saves it to the database.
+   * It is used for registering new users, storing their authentication and personal details.
    *
-   * @param {RegistrationDto} dto - DTO containing user registration data.
-   * @returns {Promise<Auth>} A Promise that resolves to the created user object.
+   * @param {RegistrationDto} dto - Data Transfer Object containing the new user's registration information.
+   * @returns {Promise<Auth>} A Promise resolved with the newly created user's Auth document.
    */
 
   async create(dto: RegistrationDto): Promise<Auth> {
