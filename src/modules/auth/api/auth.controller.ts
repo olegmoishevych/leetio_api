@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
 import { Auth } from '../domain/schema/auth.schema';
@@ -21,7 +21,7 @@ export class AuthController {
    * @param {RegistrationDto} dto - Data Transfer Object containing the new user's registration information.
    * @returns {Promise<Auth>} A Promise resolved with the newly registered user's Auth data.
    */
-
+  @HttpCode(HttpStatus.CREATED)
   @Post('registration')
   async registration(@Body() dto: RegistrationDto): Promise<Auth> {
     return this.authService.registration(dto);
