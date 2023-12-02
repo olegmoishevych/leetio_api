@@ -4,6 +4,12 @@ import { RegistrationDto } from '../api/input-dtos/registration.dto';
 import { AuthRepository } from '../infrastructure/auth.repository';
 import { AuthQueryRepository } from '../infrastructure/auth.query-repository';
 
+/**
+ * Service handling authentication tasks.
+ * This service encapsulates the logic for user authentication and registration,
+ * leveraging both AuthRepository and AuthQueryRepository for data persistence and retrieval.
+ */
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -12,14 +18,14 @@ export class AuthService {
   ) {}
 
   /**
-   * Registers a new user in the system.
-   * Checks if a user with the same email already exists.
-   * Throws a ConflictException if a user with the same email exists.
-   * Otherwise, creates a new user.
+   * Handles user registration.
+   * This method first checks if a user with the provided email already exists using AuthQueryRepository.
+   * If a user exists, a ConflictException is thrown.
+   * If no user exists, a new user record is created using AuthRepository based on the provided DTO.
    *
-   * @param {RegistrationDto} dto - DTO containing user registration data.
-   * @returns {Promise<Auth>} A Promise that resolves to the created user object.
-   * @throws {ConflictException} if a user with the same email already exists.
+   * @param {RegistrationDto} dto - Data Transfer Object containing the new user's registration information.
+   * @returns {Promise<Auth>} A Promise resolved with the newly created user's Auth data.
+   * @throws {ConflictException} if a user with the provided email already exists.
    */
 
   async registration(dto: RegistrationDto): Promise<Auth> {
