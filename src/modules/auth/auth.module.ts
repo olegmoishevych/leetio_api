@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './application/auth.service';
 import { AuthController } from './api/auth.controller';
@@ -41,6 +46,11 @@ import { JwtMiddleware } from '../../middlewares/jwt.middleware';
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes('*');
+    consumer
+      .apply(JwtMiddleware)
+      .forRoutes(
+        { path: 'auth/refresh-token', method: RequestMethod.POST },
+        { path: 'auth/logout', method: RequestMethod.POST },
+      );
   }
 }

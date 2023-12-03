@@ -73,7 +73,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
     const refreshToken = request.cookies['refreshToken'];
-    await this.authService.logout(refreshToken);
+    // await this.authService.logout(refreshToken);
 
     response.clearCookie('refreshToken');
   }
