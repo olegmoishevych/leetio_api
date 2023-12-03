@@ -18,6 +18,7 @@ export class JwtService {
     const expiresIn = this.configService.get<string>(
       'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
     );
+
     return this.nestJwtService.sign({ userId }, { secret, expiresIn });
   }
 
@@ -26,20 +27,18 @@ export class JwtService {
     const expiresIn = this.configService.get<string>(
       'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
     );
+
     return this.nestJwtService.sign({ userId }, { secret, expiresIn });
   }
-  decodeToken(token: string): string | null {
-    try {
-      return this.nestJwtService.decode(token) as string;
-    } catch (error) {
-      return null;
-    }
+  decodeToken(token: string): string {
+    return this.nestJwtService.decode(token);
   }
 
   verifyToken(token: string): boolean {
     try {
       const secret = this.configService.get<string>('JWT_SECRET');
       this.nestJwtService.verify(token, { secret });
+
       return true;
     } catch (error) {
       return false;

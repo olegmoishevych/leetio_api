@@ -6,7 +6,6 @@ import {
   HttpCode,
   Res,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
@@ -37,7 +36,6 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.login(dto);
 
     response.cookie('refreshToken', refreshToken, { httpOnly: true });
-
     return { accessToken };
   }
 
@@ -50,7 +48,6 @@ export class AuthController {
     const newTokens = await this.authService.refreshToken(refreshToken);
 
     response.cookie('refreshToken', newTokens.refreshToken, { httpOnly: true });
-
     return { accessToken: newTokens.accessToken };
   }
 }
