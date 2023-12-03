@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsDate, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -25,14 +25,6 @@ export class RegistrationDto {
   @IsDate({ message: 'dateOfBirth must be a Date format' })
   @ApiProperty({ description: 'Date of birth of the user', type: Date })
   dateOfBirth: Date;
-
-  @IsString({ message: 'avatar must be a base64 format' })
-  @IsOptional()
-  @ApiProperty({
-    description: 'Avatar of the user in base64 format',
-    required: false,
-  })
-  avatar?: string;
 
   @IsString({ message: 'password must be a string' })
   @ApiProperty({ description: 'Password for the user account' })

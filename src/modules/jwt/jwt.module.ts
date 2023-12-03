@@ -1,6 +1,7 @@
 import { Module, Global } from '@nestjs/common';
 import { JwtModule as NestJwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtService } from './jwt.service';
 
 /**
  * Global JWT (JSON Web Token) module.
@@ -23,6 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  exports: [NestJwtModule],
+  providers: [JwtService],
+  exports: [NestJwtModule, JwtService],
 })
 export class JwtModule {}
