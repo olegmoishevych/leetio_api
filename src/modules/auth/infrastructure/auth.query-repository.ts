@@ -25,4 +25,7 @@ export class AuthQueryRepository {
   async findUserByEmail(email: string): Promise<Auth | null> {
     return this.authModel.findOne({ email }).exec();
   }
+  async findUserById(userId: string): Promise<Auth | null> {
+    return this.authModel.findOne({ _id: userId }).exec();
+  }
 }

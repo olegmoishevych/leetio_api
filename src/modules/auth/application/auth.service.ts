@@ -67,4 +67,37 @@ export class AuthService {
 
     return { accessToken, refreshToken };
   }
+
+  async refreshToken(
+    oldRefreshToken: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    if (!oldRefreshToken) {
+      throw new UnauthorizedException('Refresh token is required');
+    }
+
+    let decoded;
+    try {
+      decoded = this.jwtService.decodeToken(oldRefreshToken);
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (!decoded || !decoded.userId) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.authQueryRepository.findUserById(decoded.userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!this.jwtService.verifyToken(oldRefreshToken)) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    const accessToken = this.jwtService.generateAccessToken(user.id);
+    const refreshToken = this.jwtService.generateRefreshToken(user.id);
+
+    return { accessToken, refreshToken };
+  }
 }

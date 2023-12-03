@@ -28,4 +28,21 @@ export class JwtService {
     );
     return this.nestJwtService.sign({ userId }, { secret, expiresIn });
   }
+  decodeToken(token: string): string | null {
+    try {
+      return this.nestJwtService.decode(token) as string;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  verifyToken(token: string): boolean {
+    try {
+      const secret = this.configService.get<string>('JWT_SECRET');
+      this.nestJwtService.verify(token, { secret });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

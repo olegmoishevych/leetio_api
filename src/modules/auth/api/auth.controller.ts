@@ -38,4 +38,17 @@ export class AuthController {
 
     return { accessToken };
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh-token')
+  async refreshToken(
+    @Res({ passthrough: true }) response: Response,
+    @Body('refreshToken') refreshToken: string,
+  ): Promise<{ accessToken: string }> {
+    const newTokens = await this.authService.refreshToken(refreshToken);
+
+    response.cookie('refreshToken', newTokens.refreshToken, { httpOnly: true });
+
+    return { accessToken: newTokens.accessToken };
+  }
 }
