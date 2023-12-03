@@ -5,11 +5,13 @@ import {
   HttpStatus,
   HttpCode,
   Res,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
 import { LoginDto } from './input-dtos/login.dto';
-import { Response } from 'express';
+import { response, Response, Request } from 'express';
 
 /**
  * Controller that handles authentication-related requests.
@@ -42,9 +44,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('refresh-token')
   async refreshToken(
-    @Res({ passthrough: true }) response: Response,
-    @Body('refreshToken') refreshToken: string,
+    @Req() request: Request,
   ): Promise<{ accessToken: string }> {
+    const refreshToken = request.cookies['refreshToken'];
     const newTokens = await this.authService.refreshToken(refreshToken);
 
     response.cookie('refreshToken', newTokens.refreshToken, { httpOnly: true });

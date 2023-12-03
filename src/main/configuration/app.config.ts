@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { swaggerConfig } from './swagger/swagger.config';
 import { pipeSetup } from './pipe.setup';
+import * as cookieParser from 'cookie-parser';
 
 /**
  * Application configuration function.
@@ -27,5 +28,6 @@ export const appConfig = (app: INestApplication) => {
 export const baseAppConfig = (app: INestApplication) => {
   const configService = app.get(ConfigService);
 
+  app.use(cookieParser());
   return app;
 };
