@@ -68,13 +68,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   @UseGuards(JwtMiddleware)
-  async logout(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<void> {
-    const refreshToken = request.cookies['refreshToken'];
-    // await this.authService.logout(refreshToken);
-
+  async logout(@Res({ passthrough: true }) response: Response): Promise<void> {
     response.clearCookie('refreshToken');
   }
 }
