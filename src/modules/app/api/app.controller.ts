@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from '../application/app.service';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 /**
  * Main application controller.
@@ -18,6 +19,7 @@ export class AppController {
    * @returns {string} The greeting message returned by the AppService.
    */
   @Get()
+  @ApiExcludeEndpoint()
   getHello(): string {
     return this.appService.getHello();
   }
