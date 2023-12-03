@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+/**
+ * Service for handling JWT (JSON Web Token) operations.
+ * This service facilitates the creation and signing of access and refresh tokens.
+ * It is used for user authentication and authorization.
+ */
 @Injectable()
 export class JwtService {
   constructor(

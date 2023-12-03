@@ -25,20 +25,6 @@ export class AuthService {
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
   ) {}
-
-  /**
-   * Handles the user registration process.
-   * Checks if the user already exists with the provided email.
-   * If the user exists, throws a ConflictException.
-   * If the user does not exist, hashes the provided password and creates a new user record.
-   * After successful user creation, sends a registration notification email.
-   * Catches and handles any unexpected errors by throwing an InternalServerErrorException.
-   *
-   * @param {RegistrationDto} dto - Data Transfer Object with the user's registration information.
-   * @throws {ConflictException} if a user with the provided email already exists.
-   * @throws {InternalServerErrorException} for any other unexpected errors.
-   */
-
   async registration(dto: RegistrationDto): Promise<void> {
     try {
       const userExists = await this.authQueryRepository.findUserByEmail(
@@ -66,16 +52,18 @@ export class AuthService {
     }
   }
 
-  async login({ password, email, firstName }: LoginDto) {
+  async login({
+    password,
+    email,
+    firstName,
+  }: LoginDto): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.authQueryRepository.findUserByEmail(email);
 
-    if (!user || user.firstName !== firstName) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const isPasswordMatching = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordMatching) {
+    if (
+      !user ||
+      user.firstName !== firstName ||
+      !(await bcrypt.compare(password, user.password))
+    ) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
