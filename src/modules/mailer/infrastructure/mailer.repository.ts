@@ -24,7 +24,7 @@ export class MailerRepository {
     html: string,
   ): Promise<boolean> {
     return this.mailerService.sendMail({
-      from: 'oleg <olegmoishevych@gmail.com>',
+      from: 'Welcome! <olegmoishevych@gmail.com>',
       to: email,
       subject,
       html,

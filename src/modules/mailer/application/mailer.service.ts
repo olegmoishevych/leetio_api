@@ -3,27 +3,27 @@ import { MailerRepository } from '../infrastructure/mailer.repository';
 
 /**
  * MailerService: A service responsible for handling high-level email operations.
- * This service provides an abstraction over the MailerRepository, allowing for more
- * complex operations and transformations before sending emails.
+ * This service abstracts over the MailerRepository, enabling more complex operations
+ * and transformations before sending emails.
  */
 @Injectable()
 export class MailerService {
   constructor(private mailerRepository: MailerRepository) {}
+
   /**
-   * Sends an email for registration confirmation.
-   * This method prepares the content for the confirmation email and utilizes the MailerRepository
-   * to actually send the email.
+   * Sends a registration notification email.
+   * This method prepares the content for the email and uses the MailerRepository
+   * to send it. The content of the email includes a message confirming successful registration.
    *
-   * @param {string} email - Recipient's email address.
-   * @param {string} confirmationLink - The link to be clicked for confirming registration.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean indicating the success or failure of sending the email.
+   * @param {string} email - The recipient's email address.
+   * @returns {Promise<boolean>} - A promise resolving to a boolean indicating the success or failure of sending the email.
    */
   async sendRegistrationNotification(email: string): Promise<boolean> {
-    const html = `<p>Вы успешно зарегистрированы в нашей системе.</p>`;
+    const html = `<p>You have been successfully registered in our system.</p>`;
 
     return this.mailerRepository.sentEmail(
       email,
-      'Уведомление о регистрации',
+      'Registration Notification',
       html,
     );
   }
