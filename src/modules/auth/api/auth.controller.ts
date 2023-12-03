@@ -6,6 +6,7 @@ import {
   HttpCode,
   Res,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
@@ -16,6 +17,7 @@ import { ApiLoginSwagger } from '../swagger/login';
 import { ApiRefreshTokenSwagger } from '../swagger/refreshToken';
 import { ApiLogoutSwagger } from '../swagger/logout';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
 
 /**
  * Controller that handles authentication-related requests.
@@ -50,6 +52,7 @@ export class AuthController {
   @ApiRefreshTokenSwagger()
   @HttpCode(HttpStatus.OK)
   @Post('refresh-token')
+  @UseGuards(JwtMiddleware)
   async refreshToken(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
@@ -64,6 +67,7 @@ export class AuthController {
   @ApiLogoutSwagger()
   @HttpCode(HttpStatus.OK)
   @Post('logout')
+  @UseGuards(JwtMiddleware)
   async logout(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,

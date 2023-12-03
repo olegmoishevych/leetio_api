@@ -19,7 +19,7 @@ export const appConfig = (app: INestApplication) => {
 /**
  * Base application configuration function.
  * Sets up essential configurations required for the application.
- * This can include middleware, database connections, etc.
+ * This can include middlewares, database connections, etc.
  *
  * @param {INestApplication} app - The instance of the NestJS application.
  * @returns {INestApplication} The configured application instance.

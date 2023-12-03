@@ -10,6 +10,7 @@ import { AuthRepository } from './infrastructure/auth.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { JwtService } from '../jwt/jwt.service';
 import { MailerGlobalModule } from '../mailer/mailer.module';
+import { JwtMiddleware } from '../../middlewares/jwt.middleware';
 
 /**
  * Authentication module.
@@ -30,6 +31,12 @@ import { MailerGlobalModule } from '../mailer/mailer.module';
     MailerGlobalModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, AuthRepository, AuthQueryRepository],
+  providers: [
+    AuthService,
+    JwtService,
+    AuthRepository,
+    AuthQueryRepository,
+    JwtMiddleware,
+  ],
 })
 export class AuthModule {}
