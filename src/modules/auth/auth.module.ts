@@ -43,7 +43,7 @@ import { JwtMiddleware } from '../../middlewares/jwt.middleware';
     AuthQueryRepository,
     JwtMiddleware,
   ],
-  exports: [AuthQueryRepository],
+  exports: [AuthQueryRepository, AuthRepository],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

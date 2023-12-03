@@ -16,4 +16,7 @@ export class AuthRepository {
     const newUser = new this.authModel(dto);
     return newUser.save();
   }
+  async updateAvatarPath(userId: string, avatarPath: string): Promise<void> {
+    await this.authModel.findByIdAndUpdate(userId, { avatar: avatarPath });
+  }
 }

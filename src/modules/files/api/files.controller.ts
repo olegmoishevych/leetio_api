@@ -1,6 +1,7 @@
 import {
   Controller,
-  Post,
+  Put,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -8,14 +9,20 @@ import {
 import { FilesService } from '../application/files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
-
+import { Request } from 'express';
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
-  @Post('upload-avatar')
+  @Put('upload-avatar')
   @UseGuards(JwtMiddleware)
   @UseInterceptors(FileInterceptor('avatar'))
-  uploadFile(@UploadedFile() avatar: Express.Multer.File) {
-    console.log(avatar);
+  async updateUserAvatar(
+    @UploadedFile() avatar: Express.Multer.File,
+    @Req() req: Request,
+  ) {
+    const user = req.user as any;
+    const userId = user.userId;
+
+    return this.filesService.updateUserAvatar(userId, avatar);
   }
 }

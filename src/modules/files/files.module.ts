@@ -1,12 +1,24 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { FilesService } from './application/files.service';
 import { FilesController } from './api/files.controller';
 import { JwtModule } from '../jwt/jwt.module';
 import { AuthModule } from '../auth/auth.module';
+import { JwtMiddleware } from '../../middlewares/jwt.middleware';
 
 @Module({
   imports: [JwtModule, AuthModule],
   controllers: [FilesController],
   providers: [FilesService],
 })
-export class FilesModule {}
+export class FilesModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(JwtMiddleware)
+      .forRoutes({ path: 'files/upload-avatar', method: RequestMethod.PUT });
+  }
+}
