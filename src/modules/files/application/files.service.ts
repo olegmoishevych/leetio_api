@@ -1,32 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { promises as fs } from 'fs';
-import { join } from 'path';
 import { AuthRepository } from '../../auth/infrastructure/auth.repository';
+import sharp from 'sharp';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { join, extname } from 'path';
 
 @Injectable()
 export class FilesService {
-  private readonly uploadPath = 'upload/avatar';
+  private readonly uploadFolder = 'upload';
 
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async updateUserAvatar(
-    userId: string,
-    file: Express.Multer.File,
-  ): Promise<string> {
-    const userFolderPath = join(this.uploadPath, userId);
-    await fs.mkdir(userFolderPath, { recursive: true });
-
-    const filePath = join(userFolderPath, file.originalname);
-    await fs.writeFile(filePath, file.buffer);
-
-    await this.updateUserAvatarPath(userId, filePath);
-    return filePath;
+  private ensureUploadFolderExists() {
+    if (!existsSync(this.uploadFolder)) {
+      mkdirSync(this.uploadFolder, { recursive: true });
+    }
   }
 
-  private async updateUserAvatarPath(
-    userId: string,
-    filePath: string,
-  ): Promise<void> {
-    await this.authRepository.updateAvatarPath(userId, filePath);
+  async handleFile(file: Express.Multer.File, userId: string): Promise<void> {
+    this.ensureUploadFolderExists();
+
+    const processedImage = await sharp(file.buffer).resize(500, 500).toBuffer();
+    const filename = `${Date.now()}${extname(file.originalname)}`;
+    const filepath = join(this.uploadFolder, filename);
+
+    writeFileSync(filepath, processedImage);
+    await this.authRepository.updateAvatarPath(userId, filepath);
   }
 }

@@ -23,6 +23,6 @@ export class FilesController {
     const user = req.user as any;
     const userId = user.userId;
 
-    return this.filesService.updateUserAvatar(userId, avatar);
+    return this.filesService.handleFile(avatar, userId);
   }
 }

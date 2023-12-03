@@ -7,6 +7,8 @@ import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '../jwt/jwt.module';
 import { GlobalThrottlerModule } from '../throttler/throttler.module';
 import { FilesModule } from '../files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 /**
  * Main application module.
@@ -16,6 +18,10 @@ import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'upload'),
+      serveRoot: '/upload',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
