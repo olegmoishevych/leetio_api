@@ -55,15 +55,10 @@ export class AuthService {
   async login({
     password,
     email,
-    firstName,
   }: LoginDto): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.authQueryRepository.findUserByEmail(email);
 
-    if (
-      !user ||
-      user.firstName !== firstName ||
-      !(await bcrypt.compare(password, user.password))
-    ) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
