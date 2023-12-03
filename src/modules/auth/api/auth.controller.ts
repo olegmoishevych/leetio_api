@@ -31,7 +31,7 @@ export class AuthController {
   async login(
     @Res({ passthrough: true }) response: Response,
     @Body() dto: LoginDto,
-  ): Promise<any> {
+  ): Promise<{ accessToken: string }> {
     const { accessToken, refreshToken } = await this.authService.login(dto);
 
     response.cookie('refreshToken', refreshToken, { httpOnly: true });
