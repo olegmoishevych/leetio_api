@@ -2,6 +2,7 @@ import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
 import { Auth } from '../domain/schema/auth.schema';
+import { LoginDto } from './input-dtos/login.dto';
 
 /**
  * Controller that handles authentication-related requests.
@@ -26,5 +27,10 @@ export class AuthController {
   @Post('registration')
   async registration(@Body() dto: RegistrationDto): Promise<void> {
     return this.authService.registration(dto);
+  }
+
+  @Post('login')
+  async login(@Body() dto: LoginDto): Promise<any> {
+    return this.authService.login(dto);
   }
 }

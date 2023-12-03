@@ -2,14 +2,15 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { Auth } from '../domain/schema/auth.schema';
 import { RegistrationDto } from '../api/input-dtos/registration.dto';
 import { AuthRepository } from '../infrastructure/auth.repository';
 import { AuthQueryRepository } from '../infrastructure/auth.query-repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '../../jwt/jwt.service';
 import { MailerService } from '../../mailer/application/mailer.service';
+import { LoginDto } from '../api/input-dtos/login.dto';
 
 /**
  * Service handling authentication tasks.
@@ -62,6 +63,20 @@ export class AuthService {
         );
       }
       throw error;
+    }
+  }
+
+  async login({ password, email }: LoginDto) {
+    const user = await this.authQueryRepository.findUserByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordMatching = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException('Invalid credentials');
     }
   }
 }
