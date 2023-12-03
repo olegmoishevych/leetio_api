@@ -6,6 +6,12 @@ import {
 import { NextFunction, Request, Response } from 'express';
 import { JwtService } from '../modules/jwt/jwt.service';
 import { AuthQueryRepository } from '../modules/auth/infrastructure/auth.query-repository';
+
+/**
+ * Middleware that handles JWT authentication.
+ * It checks for the presence of a JWT token in cookies, verifies the token,
+ * and ensures that the associated user exists in the database.
+ */
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
   constructor(
@@ -14,13 +20,18 @@ export class JwtMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const refreshToken = req.cookies?.['refreshToken'];
+    const refreshToken = req.cookies['refreshToken'];
     if (!refreshToken) {
       throw new UnauthorizedException('No token provided');
     }
 
-    const decoded = this.jwtService.decodeToken(refreshToken);
-    if (!decoded || !decoded.userId) {
+    let decoded;
+    try {
+      decoded = this.jwtService.decodeToken(refreshToken);
+      if (!decoded || !decoded.userId) {
+        throw new UnauthorizedException('Invalid token');
+      }
+    } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
 
