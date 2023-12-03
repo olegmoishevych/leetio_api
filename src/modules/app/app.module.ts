@@ -19,7 +19,7 @@ import { join } from 'path';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'upload'),
+      rootPath: join(__dirname, '..', '..', '..', 'upload'),
       serveRoot: '/upload',
     }),
     ConfigModule.forRoot({
