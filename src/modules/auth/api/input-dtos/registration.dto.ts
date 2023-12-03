@@ -8,23 +8,23 @@ import { Type } from 'class-transformer';
  */
 
 export class RegistrationDto {
-  @IsString()
+  @IsString({ message: 'firstName must be a string' })
   firstName: string;
 
-  @IsString()
+  @IsString({ message: 'lastName must be a string' })
   lastName: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 
   @Type(() => Date)
-  @IsDate()
+  @IsDate({ message: 'dateOfBirth must be a Date format' })
   dateOfBirth: Date;
 
-  @IsString()
+  @IsString({ message: 'avatar must be a base64 format' })
   @IsOptional()
   avatar?: string;
 
-  @IsString()
+  @IsString({ message: 'password must be a string' })
   password: string;
 }
