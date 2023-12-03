@@ -13,6 +13,7 @@ import { LoginDto } from './input-dtos/login.dto';
 import { Response, Request } from 'express';
 import { ApiRegistrationSwagger } from '../swagger/registration';
 import { ApiLoginSwagger } from '../swagger/login';
+import { ApiRefreshTokenSwagger } from '../swagger/refreshToken';
 
 /**
  * Controller that handles authentication-related requests.
@@ -43,6 +44,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @ApiRefreshTokenSwagger()
   @HttpCode(HttpStatus.OK)
   @Post('refresh-token')
   async refreshToken(
