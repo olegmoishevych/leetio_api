@@ -14,6 +14,7 @@ import { Response, Request } from 'express';
 import { ApiRegistrationSwagger } from '../swagger/registration';
 import { ApiLoginSwagger } from '../swagger/login';
 import { ApiRefreshTokenSwagger } from '../swagger/refreshToken';
+import { ApiLogoutSwagger } from '../swagger/logout';
 
 /**
  * Controller that handles authentication-related requests.
@@ -58,6 +59,7 @@ export class AuthController {
     return { accessToken: newTokens.accessToken };
   }
 
+  @ApiLogoutSwagger()
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   async logout(
