@@ -51,4 +51,16 @@ export class AuthController {
     response.cookie('refreshToken', newTokens.refreshToken, { httpOnly: true });
     return { accessToken: newTokens.accessToken };
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
+    const refreshToken = request.cookies['refreshToken'];
+    await this.authService.logout(refreshToken);
+
+    response.clearCookie('refreshToken');
+  }
 }

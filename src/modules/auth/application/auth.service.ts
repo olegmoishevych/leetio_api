@@ -100,4 +100,24 @@ export class AuthService {
 
     return { accessToken, refreshToken };
   }
+
+  async logout(refreshToken: string): Promise<void> {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is required for logout');
+    }
+
+    const decoded = this.jwtService.decodeToken(refreshToken);
+    if (!decoded || !decoded.userId) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.authQueryRepository.findUserById(decoded.userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!this.jwtService.verifyToken(refreshToken)) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
 }

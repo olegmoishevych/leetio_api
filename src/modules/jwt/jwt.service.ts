@@ -30,8 +30,8 @@ export class JwtService {
 
     return this.nestJwtService.sign({ userId }, { secret, expiresIn });
   }
-  decodeToken(token: string): string {
-    return this.nestJwtService.decode(token);
+  decodeToken(token: string): DecodedToken {
+    return this.nestJwtService.decode(token) as DecodedToken;
   }
 
   verifyToken(token: string): boolean {
