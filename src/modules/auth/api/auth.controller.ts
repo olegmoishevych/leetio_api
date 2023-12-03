@@ -1,8 +1,15 @@
-import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  HttpCode,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
-import { Auth } from '../domain/schema/auth.schema';
 import { LoginDto } from './input-dtos/login.dto';
+import { Response } from 'express';
 
 /**
  * Controller that handles authentication-related requests.
@@ -21,7 +28,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Body() dto: LoginDto): Promise<any> {
-    return this.authService.login(dto);
+  async login(
+    @Res({ passthrough: true }) response: Response,
+    @Body() dto: LoginDto,
+  ): Promise<any> {
+    const { accessToken, refreshToken } = await this.authService.login(dto);
+
+    response.cookie('refreshToken', refreshToken, { httpOnly: true });
+
+    return { accessToken };
   }
 }

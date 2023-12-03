@@ -15,7 +15,9 @@ import { GlobalThrottlerModule } from '../throttler/throttler.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongodbModule,
     AuthModule,
     JwtModule,
