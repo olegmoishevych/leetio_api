@@ -13,4 +13,7 @@ export class LoginDto {
 
   @IsString({ message: 'Password must be a string' })
   password: string;
+
+  @IsString({ message: 'firstName must be a string' })
+  firstName: string;
 }

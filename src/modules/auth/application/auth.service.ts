@@ -66,10 +66,10 @@ export class AuthService {
     }
   }
 
-  async login({ password, email }: LoginDto) {
+  async login({ password, email, firstName }: LoginDto) {
     const user = await this.authQueryRepository.findUserByEmail(email);
 
-    if (!user) {
+    if (!user || user.firstName !== firstName) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -78,5 +78,10 @@ export class AuthService {
     if (!isPasswordMatching) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    const accessToken = this.jwtService.generateAccessToken(user.id);
+    const refreshToken = this.jwtService.generateRefreshToken(user.id);
+
+    return { accessToken, refreshToken };
   }
 }
