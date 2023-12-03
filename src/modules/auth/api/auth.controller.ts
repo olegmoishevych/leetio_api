@@ -10,7 +10,8 @@ import {
 import { AuthService } from '../application/auth.service';
 import { RegistrationDto } from './input-dtos/registration.dto';
 import { LoginDto } from './input-dtos/login.dto';
-import { response, Response, Request } from 'express';
+import { Response, Request } from 'express';
+import { ApiRegistrationSwagger } from '../swagger/registration';
 
 /**
  * Controller that handles authentication-related requests.
@@ -21,6 +22,7 @@ import { response, Response, Request } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+  @ApiRegistrationSwagger()
   @HttpCode(HttpStatus.CREATED)
   @Post('registration')
   async registration(@Body() dto: RegistrationDto): Promise<void> {
