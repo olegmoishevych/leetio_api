@@ -43,6 +43,7 @@ export class AuthController {
   @Post('refresh-token')
   async refreshToken(
     @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
   ): Promise<{ accessToken: string }> {
     const refreshToken = request.cookies['refreshToken'];
     const newTokens = await this.authService.refreshToken(refreshToken);
