@@ -12,6 +12,7 @@ import { RegistrationDto } from './input-dtos/registration.dto';
 import { LoginDto } from './input-dtos/login.dto';
 import { Response, Request } from 'express';
 import { ApiRegistrationSwagger } from '../swagger/registration';
+import { ApiLoginSwagger } from '../swagger/login';
 
 /**
  * Controller that handles authentication-related requests.
@@ -29,6 +30,7 @@ export class AuthController {
     return this.authService.registration(dto);
   }
 
+  @ApiLoginSwagger()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
