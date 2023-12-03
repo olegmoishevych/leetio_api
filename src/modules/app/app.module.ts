@@ -6,6 +6,7 @@ import { MongodbModule } from '../../providers/mongodb/mongodb.module';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '../jwt/jwt.module';
 import { GlobalThrottlerModule } from '../throttler/throttler.module';
+import { FilesModule } from '../files/files.module';
 
 /**
  * Main application module.
@@ -22,6 +23,7 @@ import { GlobalThrottlerModule } from '../throttler/throttler.module';
     AuthModule,
     JwtModule,
     GlobalThrottlerModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
