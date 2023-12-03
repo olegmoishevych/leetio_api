@@ -15,6 +15,7 @@ import { ApiRegistrationSwagger } from '../swagger/registration';
 import { ApiLoginSwagger } from '../swagger/login';
 import { ApiRefreshTokenSwagger } from '../swagger/refreshToken';
 import { ApiLogoutSwagger } from '../swagger/logout';
+import { ApiTags } from '@nestjs/swagger';
 
 /**
  * Controller that handles authentication-related requests.
@@ -23,6 +24,7 @@ import { ApiLogoutSwagger } from '../swagger/logout';
  */
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiRegistrationSwagger()
