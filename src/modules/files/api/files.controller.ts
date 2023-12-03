@@ -32,9 +32,9 @@ export class FilesController {
     return this.filesService.handleFile(avatar, userId);
   }
 
+  @Get('avatar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
-  @Get('avatar')
   async getImages(): Promise<{ [key: string]: string }> {
     this.filesService.ensureUploadFolderExists();
     const filenames = fs.readdirSync(this.uploadFolder);

@@ -17,12 +17,18 @@ export class FilesService {
 
   async handleFile(file: Express.Multer.File, userId: string): Promise<any> {
     this.ensureUploadFolderExists();
-    const processedImage = await sharp(file.buffer).resize(500, 500).toBuffer();
 
-    const filename = Date.now() + path.extname(file.originalname);
+    const extension = path.extname(file.originalname);
+    const filename = `${userId}${extension}`;
     const filepath = path.join(this.uploadFolder, filename);
 
+    if (fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+
+    const processedImage = await sharp(file.buffer).resize(500, 500).toBuffer();
     fs.writeFileSync(filepath, processedImage);
+
     await this.authRepository.updateAvatarPath(userId, filepath);
   }
 }
