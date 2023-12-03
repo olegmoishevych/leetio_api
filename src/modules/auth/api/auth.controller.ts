@@ -24,7 +24,7 @@ export class AuthController {
    */
   @HttpCode(HttpStatus.CREATED)
   @Post('registration')
-  async registration(@Body() dto: RegistrationDto): Promise<Auth> {
+  async registration(@Body() dto: RegistrationDto): Promise<void> {
     return this.authService.registration(dto);
   }
 }

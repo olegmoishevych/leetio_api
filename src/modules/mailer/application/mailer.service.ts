@@ -18,12 +18,13 @@ export class MailerService {
    * @param {string} confirmationLink - The link to be clicked for confirming registration.
    * @returns {Promise<boolean>} - A promise that resolves to a boolean indicating the success or failure of sending the email.
    */
-  async sendConfirmationCodeByEmail(
-    email: string,
-    confirmationLink: string,
-  ): Promise<boolean> {
-    const html = `<p>To confirm your registration, please click on the following <a href="${confirmationLink}">link</a>.</p>`;
+  async sendRegistrationNotification(email: string): Promise<boolean> {
+    const html = `<p>Вы успешно зарегистрированы в нашей системе.</p>`;
 
-    return this.mailerRepository.sentEmail(email, 'Email Confirmation', html);
+    return this.mailerRepository.sentEmail(
+      email,
+      'Уведомление о регистрации',
+      html,
+    );
   }
 }

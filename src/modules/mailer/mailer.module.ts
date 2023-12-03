@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailerService } from './application/mailer.service';
+import { MailerRepository } from './infrastructure/mailer.repository';
 
 /**
  * MailerGlobalModule: A global module that configures and provides the MailerService.
@@ -25,7 +26,7 @@ import { MailerService } from './application/mailer.service';
       }),
     }),
   ],
-  providers: [MailerService],
-  exports: [MailerService],
+  providers: [MailerService, MailerRepository],
+  exports: [MailerService, MailerRepository],
 })
 export class MailerGlobalModule {}

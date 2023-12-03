@@ -8,6 +8,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthQueryRepository } from './infrastructure/auth.query-repository';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { JwtService } from '../jwt/jwt.service';
+import { MailerService } from '../mailer/application/mailer.service';
+import { MailerGlobalModule } from '../mailer/mailer.module';
 
 /**
  * Authentication module.
@@ -25,8 +28,9 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ConfigModule,
     MongooseModule.forFeature([{ name: Auth.name, schema: AuthSchema }]),
     JwtModule,
+    MailerGlobalModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, AuthQueryRepository],
+  providers: [AuthService, JwtService, AuthRepository, AuthQueryRepository],
 })
 export class AuthModule {}

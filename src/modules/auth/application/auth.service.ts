@@ -1,47 +1,67 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Auth } from '../domain/schema/auth.schema';
 import { RegistrationDto } from '../api/input-dtos/registration.dto';
 import { AuthRepository } from '../infrastructure/auth.repository';
 import { AuthQueryRepository } from '../infrastructure/auth.query-repository';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '../../jwt/jwt.service';
+import { MailerService } from '../../mailer/application/mailer.service';
+
 /**
  * Service handling authentication tasks.
  * This service encapsulates the logic for user authentication and registration,
  * leveraging both AuthRepository and AuthQueryRepository for data persistence and retrieval.
  */
-
 @Injectable()
 export class AuthService {
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly authQueryRepository: AuthQueryRepository,
+    private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService,
   ) {}
 
   /**
-   * Handles user registration.
-   * This method first checks if a user with the provided email already exists using AuthQueryRepository.
-   * If a user exists, a ConflictException is thrown.
-   * If no user exists, the password provided in the DTO is hashed for security.
-   * A new user record, with the hashed password, is then created using AuthRepository.
+   * Handles the user registration process.
+   * Checks if the user already exists with the provided email.
+   * If the user exists, throws a ConflictException.
+   * If the user does not exist, hashes the provided password and creates a new user record.
+   * After successful user creation, sends a registration notification email.
+   * Catches and handles any unexpected errors by throwing an InternalServerErrorException.
    *
-   * @param {RegistrationDto} dto - Data Transfer Object containing the new user's registration information, including the plaintext password.
-   * @returns {Promise<Auth>} A Promise resolved with the newly created user's Auth data, including a hashed password for security.
+   * @param {RegistrationDto} dto - Data Transfer Object with the user's registration information.
    * @throws {ConflictException} if a user with the provided email already exists.
+   * @throws {InternalServerErrorException} for any other unexpected errors.
    */
 
-  async registration(dto: RegistrationDto): Promise<Auth> {
-    const user = await this.authQueryRepository.findUserByEmail(dto.email);
+  async registration(dto: RegistrationDto): Promise<void> {
+    try {
+      const userExists = await this.authQueryRepository.findUserByEmail(
+        dto.email,
+      );
 
-    if (user) {
-      throw new ConflictException('User with the same email already exists');
+      if (userExists) {
+        throw new ConflictException('User with the same email already exists');
+      }
+
+      const hashedPassword = await bcrypt.hash(dto.password, 10);
+      await this.authRepository.create({
+        ...dto,
+        password: hashedPassword,
+      });
+
+      await this.mailerService.sendRegistrationNotification(dto.email);
+    } catch (error) {
+      if (!(error instanceof ConflictException)) {
+        throw new InternalServerErrorException(
+          'An unexpected error occurred during registration',
+        );
+      }
+      throw error;
     }
-
-    const hash = await bcrypt.hash(dto.password, 10);
-    const newUser = {
-      ...dto,
-      password: hash,
-    };
-
-    return this.authRepository.create(newUser);
   }
 }
