@@ -9,7 +9,6 @@ import { AuthQueryRepository } from './infrastructure/auth.query-repository';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { JwtService } from '../jwt/jwt.service';
-import { MailerService } from '../mailer/application/mailer.service';
 import { MailerGlobalModule } from '../mailer/mailer.module';
 
 /**
