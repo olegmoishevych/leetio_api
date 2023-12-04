@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { EventsService } from './application/events.service';
 import { EventsController } from './api/events.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,6 +23,14 @@ import { EventsRepository } from './infrastructure/events.repository';
 })
 export class EventsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes(EventsController);
+    consumer
+      .apply(JwtMiddleware)
+      .forRoutes(
+        { path: 'events', method: RequestMethod.POST },
+        { path: 'events/:eventId/registration', method: RequestMethod.POST },
+        { path: 'events/:eventId/unregister', method: RequestMethod.POST },
+        { path: 'events/:eventId', method: RequestMethod.PUT },
+        { path: 'events/:eventId', method: RequestMethod.DELETE },
+      );
   }
 }
