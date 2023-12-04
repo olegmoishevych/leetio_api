@@ -19,6 +19,7 @@ import { UpdateEventDto } from './input-dtos/update-event.dto';
 import { ApiCreateEventSwagger } from '../swagger/create-event';
 import { ApiGetAllEventsSwagger } from '../swagger/get-all-events';
 import { ApiRegisterToEventSwagger } from '../swagger/registration-event';
+import { ApiUnregisterFromEventSwagger } from '../swagger/unregistration-event';
 
 @ApiTags('Events')
 @Controller('events')
@@ -45,6 +46,7 @@ export class EventsController {
     return this.eventsService.registerToEvent(eventId, req.user.userId);
   }
 
+  @ApiUnregisterFromEventSwagger()
   @Post(':eventId/unregister')
   @UseGuards(JwtMiddleware)
   async unregisterFromEvent(@Param('eventId') eventId: string, @Req() req) {
