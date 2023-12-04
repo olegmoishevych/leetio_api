@@ -21,6 +21,7 @@ export class JwtMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies['refreshToken'];
+
     if (!refreshToken) {
       throw new UnauthorizedException('No token provided');
     }
@@ -28,6 +29,7 @@ export class JwtMiddleware implements NestMiddleware {
     let decoded;
     try {
       decoded = this.jwtService.decodeToken(refreshToken);
+
       if (!decoded || !decoded.userId) {
         throw new UnauthorizedException('Invalid token');
       }

@@ -18,7 +18,7 @@ import * as fs from 'fs';
 export class FilesController {
   private readonly uploadFolder = 'upload';
   constructor(private readonly filesService: FilesService) {}
-  @Put('upload-avatar')
+  @Put('update-avatar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
   @UseInterceptors(FileInterceptor('avatar'))
