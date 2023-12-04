@@ -9,6 +9,7 @@ import { GlobalThrottlerModule } from '../throttler/throttler.module';
 import { FilesModule } from '../files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { EventsModule } from '../events/events.module';
 
 /**
  * Main application module.
@@ -30,6 +31,7 @@ import { join } from 'path';
     JwtModule,
     GlobalThrottlerModule,
     FilesModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
