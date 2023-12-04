@@ -14,10 +14,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
 import { Request } from 'express';
 import * as fs from 'fs';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiUpdateAvatarSwagger } from '../swagger/update-avatar';
+@ApiTags('Files')
 @Controller('files')
 export class FilesController {
   private readonly uploadFolder = 'upload';
   constructor(private readonly filesService: FilesService) {}
+  @ApiUpdateAvatarSwagger()
   @Put('update-avatar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
