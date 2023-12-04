@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EventSchema } from './domain/schema/event.schema';
 import { AuthModule } from '../auth/auth.module';
 import { JwtMiddleware } from '../../middlewares/jwt.middleware';
+import { EventsRepository } from './infrastructure/events.repository';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { JwtMiddleware } from '../../middlewares/jwt.middleware';
     AuthModule,
   ],
   controllers: [EventsController],
-  providers: [EventsService],
+  providers: [EventsService, EventsRepository],
 })
 export class EventsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
