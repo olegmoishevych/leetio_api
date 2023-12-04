@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './api/app.controller';
 import { AppService } from './application/app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongodbModule } from '../../providers/mongodb/mongodb.module';
+import { MongodbModule } from '../mongodb/mongodb.module';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '../jwt/jwt.module';
 import { GlobalThrottlerModule } from '../throttler/throttler.module';
@@ -10,6 +10,7 @@ import { FilesModule } from '../files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { EventsModule } from '../events/events.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 /**
  * Main application module.
@@ -19,6 +20,7 @@ import { EventsModule } from '../events/events.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'upload'),
       serveRoot: '/upload',
