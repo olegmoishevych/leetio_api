@@ -3,7 +3,10 @@ import { AuthRepository } from '../../auth/infrastructure/auth.repository';
 import * as sharp from 'sharp';
 import * as fs from 'fs';
 import * as path from 'path';
-
+/**
+ * Service for handling file operations such as uploading and processing images.
+ * This includes ensuring the upload directory exists, validating file formats, processing images, and updating user avatar paths.
+ */
 @Injectable()
 export class FilesService {
   private readonly uploadFolder = 'upload';

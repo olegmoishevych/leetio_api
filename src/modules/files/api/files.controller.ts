@@ -17,6 +17,12 @@ import * as fs from 'fs';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateAvatarSwagger } from '../swagger/update-avatar';
 import { ApiGetImagesSwagger } from '../swagger/show-avatar';
+
+/**
+ * Controller managing file operations such as updating and retrieving avatars.
+ * This includes endpoints for updating a user's avatar and getting avatars.
+ */
+
 @ApiTags('Files')
 @Controller('files')
 export class FilesController {
