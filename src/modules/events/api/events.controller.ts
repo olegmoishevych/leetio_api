@@ -16,11 +16,13 @@ import { CreateEventDto } from './input-dtos/create-event.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
 import { UpdateEventDto } from './input-dtos/update-event.dto';
+import { ApiCreateEventSwagger } from '../swagger/create-event';
 
-@ApiTags('Files')
+@ApiTags('Events')
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
+  @ApiCreateEventSwagger()
   @Post()
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
