@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { AuthRepository } from '../../auth/infrastructure/auth.repository';
 import * as sharp from 'sharp';
 import * as fs from 'fs';
@@ -18,7 +18,16 @@ export class FilesService {
   async handleFile(file: Express.Multer.File, userId: string): Promise<any> {
     this.ensureUploadFolderExists();
 
-    const extension = path.extname(file.originalname);
+    const allowedExtensions = ['.png', '.jpg', '.jpeg'];
+    const extension = path.extname(file.originalname).toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+      throw new ConflictException(
+        'Invalid file format. Only PNG and JPG are allowed.',
+        'Invalid file format',
+      );
+    }
+
     const filename = `${userId}${extension}`;
     const filepath = path.join(this.uploadFolder, filename);
 

@@ -41,7 +41,7 @@ export class FilesController {
     const files = filenames.reduce((acc, filename) => {
       acc[`avatar`] = `http://localhost:3000/upload/${filename}`;
       return acc;
-    }, {} as any);
+    }, {} as string);
 
     return { files };
   }
