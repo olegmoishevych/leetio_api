@@ -17,11 +17,6 @@ import { JwtMiddleware } from '../../middlewares/jwt.middleware';
 })
 export class FilesModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtMiddleware)
-      .forRoutes(
-        { path: 'files/update-avatar', method: RequestMethod.PUT },
-        { path: 'files/avatar', method: RequestMethod.GET },
-      );
+    consumer.apply(JwtMiddleware).forRoutes(FilesController);
   }
 }

@@ -31,7 +31,8 @@ export class EventsController {
   async getAllEvents() {
     return this.eventsService.getAllEvents();
   }
-  @Post(':eventId/register')
+  @Post(':eventId/registration')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
   async registerToEvent(@Param('eventId') eventId: string, @Req() req) {
     return this.eventsService.registerToEvent(eventId, req.user.userId);

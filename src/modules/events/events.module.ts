@@ -22,8 +22,6 @@ import { EventsRepository } from './infrastructure/events.repository';
 })
 export class EventsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtMiddleware)
-      .forRoutes({ path: 'events', method: RequestMethod.POST });
+    consumer.apply(JwtMiddleware).forRoutes(EventsController);
   }
 }
