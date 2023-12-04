@@ -15,7 +15,7 @@ export class FilesService {
     }
   }
 
-  async handleFile(file: Express.Multer.File, userId: string): Promise<any> {
+  async handleFile(file: Express.Multer.File, userId: string): Promise<void> {
     this.ensureUploadFolderExists();
 
     const allowedExtensions = ['.png', '.jpg', '.jpeg'];

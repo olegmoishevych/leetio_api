@@ -25,8 +25,8 @@ export class FilesController {
   async updateUserAvatar(
     @UploadedFile() avatar: Express.Multer.File,
     @Req() req: Request,
-  ) {
-    const user = req.user as any;
+  ): Promise<void> {
+    const user = req.user as User;
     const userId = user.userId;
 
     return this.filesService.handleFile(avatar, userId);
