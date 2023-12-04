@@ -21,6 +21,7 @@ import { ApiGetAllEventsSwagger } from '../swagger/get-all-events';
 import { ApiRegisterToEventSwagger } from '../swagger/registration-event';
 import { ApiUnregisterFromEventSwagger } from '../swagger/unregistration-event';
 import { ApiUpdateEventSwagger } from '../swagger/update-event';
+import { ApiDeleteEventSwagger } from '../swagger/delete-event';
 
 @ApiTags('Events')
 @Controller('events')
@@ -66,6 +67,7 @@ export class EventsController {
     return this.eventsService.updateEvent(eventId, req.user.userId, dto);
   }
 
+  @ApiDeleteEventSwagger()
   @Delete(':eventId')
   @UseGuards(JwtMiddleware)
   @HttpCode(HttpStatus.OK)
