@@ -18,6 +18,7 @@ import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
 import { UpdateEventDto } from './input-dtos/update-event.dto';
 import { ApiCreateEventSwagger } from '../swagger/create-event';
 import { ApiGetAllEventsSwagger } from '../swagger/get-all-events';
+import { ApiRegisterToEventSwagger } from '../swagger/registration-event';
 
 @ApiTags('Events')
 @Controller('events')
@@ -36,6 +37,7 @@ export class EventsController {
   async getAllEvents() {
     return this.eventsService.getAllEvents();
   }
+  @ApiRegisterToEventSwagger()
   @Post(':eventId/registration')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
