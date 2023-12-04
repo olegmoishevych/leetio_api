@@ -23,6 +23,9 @@ export class Event extends Document {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
   userIds: Types.ObjectId[];
+
+  @Prop({ required: true, default: 'Active' })
+  status: string;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
