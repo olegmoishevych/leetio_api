@@ -16,6 +16,7 @@ import { Request } from 'express';
 import * as fs from 'fs';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateAvatarSwagger } from '../swagger/update-avatar';
+import { ApiGetImagesSwagger } from '../swagger/show-avatar';
 @ApiTags('Files')
 @Controller('files')
 export class FilesController {
@@ -36,6 +37,7 @@ export class FilesController {
     return this.filesService.handleFile(avatar, userId);
   }
 
+  @ApiGetImagesSwagger()
   @Get('avatar')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtMiddleware)
