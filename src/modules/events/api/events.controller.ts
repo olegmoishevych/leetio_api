@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -27,5 +30,31 @@ export class EventsController {
   @Get()
   async getAllEvents() {
     return this.eventsService.getAllEvents();
+  }
+  @Post(':eventId/register')
+  @UseGuards(JwtMiddleware)
+  async registerToEvent(@Param('eventId') eventId: string, @Req() req) {
+    return this.eventsService.registerToEvent(eventId, req.user.userId);
+  }
+
+  @Post(':eventId/unregister')
+  @UseGuards(JwtMiddleware)
+  async unregisterFromEvent(@Param('eventId') eventId: string, @Req() req) {
+    return this.eventsService.unregisterFromEvent(eventId, req.user.userId);
+  }
+
+  @Put(':eventId')
+  @UseGuards(JwtMiddleware)
+  async updateEvent(
+    @Param('eventId') eventId: string,
+    @Body() updateData: any,
+  ) {
+    return this.eventsService.updateEvent(eventId, updateData);
+  }
+
+  @Delete(':eventId')
+  @UseGuards(JwtMiddleware)
+  async deleteEvent(@Param('eventId') eventId: string) {
+    return this.eventsService.deleteEvent(eventId);
   }
 }
