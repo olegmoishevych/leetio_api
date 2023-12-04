@@ -15,6 +15,7 @@ import { EventsService } from '../application/events.service';
 import { CreateEventDto } from './input-dtos/create-event.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
+import { UpdateEventDto } from './input-dtos/update-event.dto';
 
 @ApiTags('Files')
 @Controller('events')
@@ -46,11 +47,13 @@ export class EventsController {
 
   @Put(':eventId')
   @UseGuards(JwtMiddleware)
+  @HttpCode(HttpStatus.OK)
   async updateEvent(
     @Param('eventId') eventId: string,
-    @Body() updateData: any,
+    @Body() dto: UpdateEventDto,
+    @Req() req,
   ) {
-    return this.eventsService.updateEvent(eventId, updateData);
+    return this.eventsService.updateEvent(eventId, req.user.userId, dto);
   }
 
   @Delete(':eventId')

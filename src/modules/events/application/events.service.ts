@@ -7,6 +7,7 @@ import { CreateEventDto } from '../api/input-dtos/create-event.dto';
 import { Event } from '../domain/schema/event.schema';
 import { EventsRepository } from '../infrastructure/events.repository';
 import { isValidObjectId } from 'mongoose';
+import { UpdateEventDto } from '../api/input-dtos/update-event.dto';
 
 @Injectable()
 export class EventsService {
@@ -42,10 +43,25 @@ export class EventsService {
     return this.eventsRepository.unregisterFromEvent(eventId, userId);
   }
 
-  async updateEvent(eventId: string, updateData: any): Promise<Event> {
+  async updateEvent(
+    eventId: string,
+    userId: string,
+    dto: UpdateEventDto,
+  ): Promise<Event> {
     await this.validateEventId(eventId);
-    await this.validateEventExists(eventId);
-    return this.eventsRepository.updateEvent(eventId, updateData);
+
+    const event = await this.eventsRepository.findById(eventId);
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${eventId} not found`);
+    }
+
+    if (event.creatorUserId.toString() !== userId.toString()) {
+      throw new UnauthorizedException(
+        'You are not authorized to update this event',
+      );
+    }
+
+    return this.eventsRepository.updateEvent(eventId, dto);
   }
 
   async deleteEvent(eventId: string, userId: string): Promise<any> {

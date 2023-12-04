@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { Event } from '../domain/schema/event.schema';
 import { CreateEventDto } from '../api/input-dtos/create-event.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { UpdateEventDto } from '../api/input-dtos/update-event.dto';
 
 @Injectable()
 export class EventsRepository {
@@ -40,9 +41,9 @@ export class EventsRepository {
       .exec();
   }
 
-  async updateEvent(eventId: string, updateData: any): Promise<Event> {
+  async updateEvent(eventId: string, dto: UpdateEventDto): Promise<Event> {
     return this.eventModel
-      .findByIdAndUpdate(eventId, updateData, { new: true })
+      .findByIdAndUpdate(eventId, dto, { new: true })
       .exec();
   }
 
