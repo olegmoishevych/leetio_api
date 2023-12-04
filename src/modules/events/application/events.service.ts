@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateEventDto } from '../api/input-dtos/create-event.dto';
 import { Event } from '../domain/schema/event.schema';
 import { EventsRepository } from '../infrastructure/events.repository';
@@ -44,9 +48,20 @@ export class EventsService {
     return this.eventsRepository.updateEvent(eventId, updateData);
   }
 
-  async deleteEvent(eventId: string): Promise<any> {
+  async deleteEvent(eventId: string, userId: string): Promise<any> {
     await this.validateEventId(eventId);
-    await this.validateEventExists(eventId);
-    return this.eventsRepository.deleteEvent(eventId);
+
+    const event = await this.eventsRepository.findById(eventId);
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${eventId} not found`);
+    }
+
+    if (event.creatorUserId.toString() !== userId.toString()) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete this event',
+      );
+    }
+
+    await this.eventsRepository.deleteEvent(eventId);
   }
 }

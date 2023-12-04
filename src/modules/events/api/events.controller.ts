@@ -55,7 +55,8 @@ export class EventsController {
 
   @Delete(':eventId')
   @UseGuards(JwtMiddleware)
-  async deleteEvent(@Param('eventId') eventId: string) {
-    return this.eventsService.deleteEvent(eventId);
+  @HttpCode(HttpStatus.OK)
+  async deleteEvent(@Param('eventId') eventId: string, @Req() req) {
+    return this.eventsService.deleteEvent(eventId, req.user.userId);
   }
 }
