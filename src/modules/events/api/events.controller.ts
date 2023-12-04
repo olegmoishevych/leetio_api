@@ -17,6 +17,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { JwtMiddleware } from '../../../middlewares/jwt.middleware';
 import { UpdateEventDto } from './input-dtos/update-event.dto';
 import { ApiCreateEventSwagger } from '../swagger/create-event';
+import { ApiGetAllEventsSwagger } from '../swagger/get-all-events';
 
 @ApiTags('Events')
 @Controller('events')
@@ -30,6 +31,7 @@ export class EventsController {
     return this.eventsService.createEvent(dto, req.user.userId);
   }
 
+  @ApiGetAllEventsSwagger()
   @Get()
   async getAllEvents() {
     return this.eventsService.getAllEvents();
