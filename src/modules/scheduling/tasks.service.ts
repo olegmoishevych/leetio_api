@@ -11,26 +11,24 @@ export class TasksService {
   constructor(
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
   ) {}
-
   @Cron('0 0 * * *')
   async handleCron() {
     this.logger.debug('Cron job for updating event status started!');
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const eventsToUpdate = await this.eventModel.find({
-      endDate: { $lt: yesterday },
-      status: 'Active',
-    });
+    const updatedEvents = await this.eventModel.updateMany(
+      { endDate: { $lte: today }, status: 'Active' },
+      { status: 'Closed' },
+    );
 
-    for (const event of eventsToUpdate) {
-      await this.eventModel.findByIdAndUpdate(event._id, { status: 'Closed' });
-      this.logger.debug(`Marked event with ID: ${event._id} as closed.`);
-    }
-
-    if (eventsToUpdate.length === 0) {
-      this.logger.debug('No events found to update status.');
+    if (updatedEvents.matchedCount === 0) {
+      this.logger.debug('No active events found to update status.');
+    } else {
+      this.logger.debug(
+        `Updated ${updatedEvents.matchedCount} events to closed status.`,
+      );
     }
   }
 }

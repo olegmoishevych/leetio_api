@@ -10,7 +10,7 @@ import { FilesModule } from '../files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { EventsModule } from '../events/events.module';
-import { ScheduleModule } from '@nestjs/schedule';
+import { TasksGlobalModule } from '../scheduling/tasks.module';
 
 /**
  * Main application module.
@@ -20,7 +20,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'upload'),
       serveRoot: '/upload',
@@ -34,6 +33,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     GlobalThrottlerModule,
     FilesModule,
     EventsModule,
+    TasksGlobalModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
