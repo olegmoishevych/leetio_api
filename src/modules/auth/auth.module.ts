@@ -13,7 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthQueryRepository } from './infrastructure/auth.query-repository';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { JwtService } from '../jwt/jwt.service';
+import { JwtService } from '../jwt/infrastructure/jwt.service';
 import { MailerGlobalModule } from '../mailer/mailer.module';
 import { JwtMiddleware } from '../../middlewares/jwt.middleware';
 

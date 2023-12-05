@@ -8,7 +8,7 @@ import { RegistrationDto } from '../api/input-dtos/registration.dto';
 import { AuthRepository } from '../infrastructure/auth.repository';
 import { AuthQueryRepository } from '../infrastructure/auth.query-repository';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '../../jwt/jwt.service';
+import { JwtService } from '../../jwt/infrastructure/jwt.service';
 import { MailerService } from '../../mailer/application/mailer.service';
 import { LoginDto } from '../api/input-dtos/login.dto';
 

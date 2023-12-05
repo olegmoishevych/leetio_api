@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { JwtService } from '../modules/jwt/jwt.service';
+import { JwtService } from '../modules/jwt/infrastructure/jwt.service';
 import { AuthQueryRepository } from '../modules/auth/infrastructure/auth.query-repository';
 
 /**
