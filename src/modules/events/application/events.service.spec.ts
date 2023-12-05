@@ -77,4 +77,38 @@ describe('EventsService', () => {
     expect(events).toHaveLength(mockEvents.length);
     expect(mockEventsRepository.getAllEvents).toHaveBeenCalled();
   });
+
+  it('should register a user to an event and return the updated event', async () => {
+    const eventId = 'someEventId';
+    const userId = 'someUserId';
+
+    const mockEvent = {
+      _id: eventId,
+      name: 'Event Name',
+      location: 'Event Location',
+      startDate: new Date(),
+      endDate: new Date(),
+      creatorUserId: 'creatorUserId',
+      userIds: [userId],
+      status: 'Active',
+    };
+
+    mockEventsRepository.registerToEvent = jest.fn().mockResolvedValue({
+      ...mockEvent,
+      userIds: [...mockEvent.userIds, userId],
+    });
+
+    service['validateEventId'] = jest.fn().mockResolvedValue(undefined);
+    service['validateEventExists'] = jest.fn().mockResolvedValue(undefined);
+
+    const updatedEvent = await service.registerToEvent(eventId, userId);
+
+    expect(service['validateEventId']).toHaveBeenCalledWith(eventId);
+    expect(service['validateEventExists']).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.registerToEvent).toHaveBeenCalledWith(
+      eventId,
+      userId,
+    );
+    expect(updatedEvent.userIds).toContain(userId);
+  });
 });
