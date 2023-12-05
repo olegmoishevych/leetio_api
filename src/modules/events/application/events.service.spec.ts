@@ -45,4 +45,36 @@ describe('EventsService', () => {
       userId,
     );
   });
+
+  it('should return an array of all events', async () => {
+    const mockEvents = [
+      {
+        _id: 'someEventId1',
+        name: 'Event 1',
+        location: 'Location 1',
+        startDate: new Date('2023-01-01T00:00:00.000Z'),
+        endDate: new Date('2023-01-02T00:00:00.000Z'),
+        creatorUserId: 'creatorUserId1',
+        userIds: ['userId1', 'userId2'],
+        status: 'Active',
+      },
+      {
+        _id: 'someEventId2',
+        name: 'Event 2',
+        location: 'Location 2',
+        startDate: new Date('2023-02-01T00:00:00.000Z'),
+        endDate: new Date('2023-02-02T00:00:00.000Z'),
+        creatorUserId: 'creatorUserId2',
+        userIds: ['userId3', 'userId4'],
+        status: 'Active',
+      },
+    ];
+
+    mockEventsRepository.getAllEvents = jest.fn().mockResolvedValue(mockEvents);
+
+    const events = await service.getAllEvents();
+    expect(events).toEqual(mockEvents);
+    expect(events).toHaveLength(mockEvents.length);
+    expect(mockEventsRepository.getAllEvents).toHaveBeenCalled();
+  });
 });
