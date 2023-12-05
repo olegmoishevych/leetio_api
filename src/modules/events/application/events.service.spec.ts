@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EventsService } from './events.service';
 import { EventsRepository } from '../infrastructure/events.repository';
 import { CreateEventDto } from '../api/input-dtos/create-event.dto';
+import { UpdateEventDto } from '../api/input-dtos/update-event.dto';
 
 describe('EventsService', () => {
   let service: EventsService;
@@ -110,5 +111,85 @@ describe('EventsService', () => {
       userId,
     );
     expect(updatedEvent.userIds).toContain(userId);
+  });
+
+  it('should unregister a user from an event and return the updated event', async () => {
+    const eventId = 'someEventId';
+    const userId = 'someUserId';
+
+    const mockEvent = {
+      _id: eventId,
+      name: 'Event Name',
+      location: 'Event Location',
+      startDate: new Date(),
+      endDate: new Date(),
+      creatorUserId: 'creatorUserId',
+      userIds: [userId, 'otherUserId'],
+      status: 'Active',
+    };
+
+    mockEventsRepository.unregisterFromEvent = jest.fn().mockResolvedValue({
+      ...mockEvent,
+      userIds: mockEvent.userIds.filter((id) => id !== userId),
+    });
+
+    service['validateEventId'] = jest.fn().mockResolvedValue(undefined);
+    service['validateEventExists'] = jest.fn().mockResolvedValue(undefined);
+
+    const updatedEvent = await service.unregisterFromEvent(eventId, userId);
+
+    expect(service['validateEventId']).toHaveBeenCalledWith(eventId);
+    expect(service['validateEventExists']).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.unregisterFromEvent).toHaveBeenCalledWith(
+      eventId,
+      userId,
+    );
+    expect(updatedEvent.userIds).not.toContain(userId);
+  });
+
+  it('should update an event and return the updated event', async () => {
+    const eventId = 'someEventId';
+    const userId = 'creatorUserId';
+    const updateEventDto: UpdateEventDto = {
+      name: 'Updated Conference',
+      location: 'New Park',
+      startDate: new Date('2023-08-21T19:00:00.000Z'),
+      endDate: new Date('2023-08-22T23:00:00.000Z'),
+      description: 'Updated description of the event.',
+    };
+
+    const existingEvent = {
+      _id: eventId,
+      name: 'Event Name',
+      location: 'Event Location',
+      startDate: new Date(),
+      endDate: new Date(),
+      creatorUserId: userId,
+      userIds: [userId],
+      status: 'Active',
+    };
+
+    // Моки для методов репозитория
+    mockEventsRepository.findById = jest.fn().mockResolvedValue(existingEvent);
+    mockEventsRepository.updateEvent = jest
+      .fn()
+      .mockResolvedValue({ ...existingEvent, ...updateEventDto });
+
+    // Мок для validateEventId
+    service['validateEventId'] = jest.fn().mockResolvedValue(undefined);
+
+    const updatedEvent = await service.updateEvent(
+      eventId,
+      userId,
+      updateEventDto,
+    );
+
+    expect(service['validateEventId']).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.findById).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.updateEvent).toHaveBeenCalledWith(
+      eventId,
+      updateEventDto,
+    );
+    expect(updatedEvent).toMatchObject({ ...existingEvent, ...updateEventDto });
   });
 });
