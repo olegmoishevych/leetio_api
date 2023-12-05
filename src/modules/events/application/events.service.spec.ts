@@ -169,13 +169,11 @@ describe('EventsService', () => {
       status: 'Active',
     };
 
-    // Моки для методов репозитория
     mockEventsRepository.findById = jest.fn().mockResolvedValue(existingEvent);
     mockEventsRepository.updateEvent = jest
       .fn()
       .mockResolvedValue({ ...existingEvent, ...updateEventDto });
 
-    // Мок для validateEventId
     service['validateEventId'] = jest.fn().mockResolvedValue(undefined);
 
     const updatedEvent = await service.updateEvent(
@@ -191,5 +189,32 @@ describe('EventsService', () => {
       updateEventDto,
     );
     expect(updatedEvent).toMatchObject({ ...existingEvent, ...updateEventDto });
+  });
+
+  it('should delete an event', async () => {
+    const eventId = 'someEventId';
+    const userId = 'creatorUserId';
+
+    const existingEvent = {
+      _id: eventId,
+      name: 'Event Name',
+      location: 'Event Location',
+      startDate: new Date(),
+      endDate: new Date(),
+      creatorUserId: userId,
+      userIds: [userId],
+      status: 'Active',
+    };
+
+    mockEventsRepository.findById = jest.fn().mockResolvedValue(existingEvent);
+    mockEventsRepository.deleteEvent = jest.fn().mockResolvedValue({});
+
+    service['validateEventId'] = jest.fn().mockResolvedValue(undefined);
+
+    await service.deleteEvent(eventId, userId);
+
+    expect(service['validateEventId']).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.findById).toHaveBeenCalledWith(eventId);
+    expect(mockEventsRepository.deleteEvent).toHaveBeenCalledWith(eventId);
   });
 });
